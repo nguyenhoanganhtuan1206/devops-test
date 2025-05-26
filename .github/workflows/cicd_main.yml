@@ -26,9 +26,9 @@ jobs:
       awsAccountId: ${{ secrets.AWS_USER_ID }}
       ecrRepoName: ${{ secrets.AWS_REPOSITORY_NAME }}
 
-  deploy:
-    needs: buildDockerAndPushECR
-    uses: ./.github/workflows/deployment.yml
-    secrets:
-      awsAccessKeyId: ${{ secrets.AWS_SECRET_KEY_ID }}
-      awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # deploy:
+  #   needs: buildDockerAndPushECR
+  #   uses: ./.github/workflows/deployment.yml
+  #   secrets:
+  #     awsAccessKeyId: ${{ secrets.AWS_SECRET_KEY_ID }}
+  #     awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -15,14 +15,6 @@ def healthcheck():
             "timestamp": datetime.now().isoformat()
         }
     ))
-    
-@app.route("/hello-world", methods=["GET"])
-def hello_world():
-    return Response(
-        status=200,
-        response="hello world"
-    )
-
 
 if __name__ == "__main__":
     app.run(port=3000, debug=True, host="0.0.0.0")
