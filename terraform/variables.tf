@@ -11,8 +11,3 @@ variable "aws_region" {
 variable "app_port" {
   default = 3000
 }
-
-variable "credential_profile" {
-  description = "Profile name in your credentials file"
-  type        = string
-}

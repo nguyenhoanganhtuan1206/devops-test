@@ -18,3 +18,5 @@ COPY . .
 
 # Expose the port the app runs on
 EXPOSE 3000
+
+CMD ["poetry", "run" ,"python3", "main.py"]

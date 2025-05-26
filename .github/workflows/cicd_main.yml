@@ -1,0 +1,34 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # qualityAssurance:
+  #   uses: ./.github/workflows/quality_check.yml
+  #   with:
+  #       projectRootDirectory: ./
+  #       prebuildCommand: cp .env.example .env
+
+  buildDockerAndPushECR:
+    # needs: qualityAssurance
+    uses: ./.github/workflows/build_docker_image.yml
+    with:
+        sourcePath: ./
+        dockerTag: ${{ github.run_id }}
+        dockerCacheTag: 'devoptest-cache'
+    secrets:
+      awsAccessKeyId: ${{ secrets.AWS_SECRET_KEY_ID }}
+      awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      awsDefaultRegion: ${{ secrets.AWS_REGION }}
+      awsAccountId: ${{ secrets.AWS_USER_ID }}
+      ecrRepoName: ${{ secrets.AWS_REPOSITORY_NAME }}
+
+  deploymentEcs:
+    needs: buildDockerAndPushECR
+    uses: ./.github/workflows/deployment.yml
+    secrets:
+      awsAccessKeyId: ${{ secrets.AWS_SECRET_KEY_ID }}
+      awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

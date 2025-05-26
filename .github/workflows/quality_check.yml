@@ -1,0 +1,32 @@
+name: 'Project Quality Assurance'
+
+on:
+  workflow_call:
+    inputs:
+      projectRootDirectory:
+        required: true
+        type: string
+        description: 'Root directory of the project to perform quality checks (e.g., ".", "apps/web", "packages/frontend").'
+      prebuildCommand:
+        required: false
+        type: string
+        description: 'Prebuild commnand'
+jobs:
+  quality-assurance:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.projectRootDirectory }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Prebuild command
+        run: ${{ inputs.prebuildCommand }}
+
+      - name: Build and run tests
+        run: |
+          docker compose run app poetry run pytest -s
