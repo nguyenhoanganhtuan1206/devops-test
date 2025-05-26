@@ -9,7 +9,7 @@ on:
         required: true
 
 jobs:
-  deployWithTerraform:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,4 +28,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.awsAccessKeyId }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.awsSecretAccessKey }}
-        run: terraform plan
+        run: terraform apply --auto-approve

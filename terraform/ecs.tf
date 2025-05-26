@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   container_definitions = jsonencode([
     {
       name  = "${var.app_name}-container"
-      image = "${aws_ecr_repository.devops_test_ecr.repository_url}:latest"
+      image = "${data.aws_ecr_repository.devops_test_ecr_name.repository_url}:latest"
       portMappings = [
         {
           containerPort = var.app_port
@@ -71,15 +71,4 @@ resource "aws_ecs_service" "ecs_service" {
   }
 
   depends_on = [aws_lb_listener.listener]
-}
-
-
-# CloudWatch Log Group for ECS
-resource "aws_cloudwatch_log_group" "ecs_log_group" {
-  name              = "/ecs/${var.app_name}"
-  retention_in_days = 7
-
-  tags = {
-    Name = "${var.app_name}-log-group"
-  }
 }

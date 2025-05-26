@@ -6,14 +6,14 @@ on:
       - main
 
 jobs:
-  # qualityAssurance:
-  #   uses: ./.github/workflows/quality_check.yml
-  #   with:
-  #       projectRootDirectory: ./
-  #       prebuildCommand: cp .env.example .env
+  qualityAssurance:
+    uses: ./.github/workflows/quality_check.yml
+    with:
+        projectRootDirectory: ./
+        prebuildCommand: cp .env.example .env
 
   buildDockerAndPushECR:
-    # needs: qualityAssurance
+    needs: qualityAssurance
     uses: ./.github/workflows/build_docker_image.yml
     with:
         sourcePath: ./
@@ -26,7 +26,7 @@ jobs:
       awsAccountId: ${{ secrets.AWS_USER_ID }}
       ecrRepoName: ${{ secrets.AWS_REPOSITORY_NAME }}
 
-  deploymentEcs:
+  deploy:
     needs: buildDockerAndPushECR
     uses: ./.github/workflows/deployment.yml
     secrets:

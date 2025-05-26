@@ -7,4 +7,5 @@ function run {
 }
 
 echo Run app in $APP_ENV environment
+
 run
