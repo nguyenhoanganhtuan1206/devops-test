@@ -29,55 +29,22 @@ The application is deployed on AWS using the following components:
 - VPC with security groups.
 - IAM roles and policies for ECS tasks.
 
-## CI/CD Pipeline
-
-The application uses GitHub Actions for continuous integration and deployment. The pipeline is triggered automatically on:
-- Push to main branch
-- Pull requests to main branch
-
-### Pipeline Stages
+## Pipeline Stages
 
 1. **Test Stage**
    - Runs unit tests using pytest in a Docker container
    - Must pass before proceeding to next stages
 
-2. **Build and Push Stage** (only on main branch)
+2. **Build and Push Stage**
    - Builds Docker image
-   - Authenticates with AWS ECR
+   - Authenticates with AWS ECR using OIDC
    - Pushes image to ECR repository
-   - Tags image with commit SHA
 
-3. **Deploy Stage** (only on main branch)
+3. **Deploy Stage**
    - Downloads current ECS task definition
    - Updates task definition with new image
    - Deploys to ECS service
    - Waits for service stability
-
-### Required GitHub Secrets
-
-The following secrets need to be configured in your GitHub repository:
-
-- `AWS_ROLE_ARN`: ARN of the IAM role for GitHub Actions to assume
-
-### Pipeline Configuration
-
-The pipeline configuration is defined in `.github/workflows/ci-cd.yml` and uses the following environment variables:
-
-```yaml
-AWS_REGION: ap-southeast-1
-ECR_REPOSITORY: devops-test
-ECS_SERVICE: devops-test-service
-ECS_CLUSTER: devops-test-cluster
-ECS_TASK_DEFINITION: task_definition/task-definition.json
-CONTAINER_NAME: devops-test-app
-```
-
-- Output:
-```bash
-[<aws-profile-name>]
-aws_access_key_id = XXXXXXXXXXXXXXXXXXXX
-aws_secret_access_key = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
 
 ## Terraform Infrastructure Deployment
 
